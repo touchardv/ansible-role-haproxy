@@ -1,9 +1,11 @@
 ---
 - name: Ensure HAProxy is installed (Debian).
+  become: yes
   apt: name=haproxy state=installed
   when: ansible_os_family == 'Debian'
 
 - name: Ensure HAProxy is enabled (so init script will start it on Debian).
+  become: yes
   lineinfile:
     dest: /etc/default/haproxy
     regexp: "^ENABLED.+$"
@@ -12,6 +14,7 @@
   when: ansible_os_family == 'Debian'
 
 - name: Ensure HAProxy is installed (RedHat).
+  become: yes
   yum: name=haproxy state=installed
   when: ansible_os_family == 'RedHat'
 
@@ -26,6 +29,7 @@
   when: "{{ selinux_enabled | default(False) }}"
 
 - name: Get HAProxy version.
+  become: yes
   command: haproxy -v
   register: haproxy_version_result
   changed_when: false
@@ -36,6 +40,7 @@
     haproxy_version: "{{ '1.5' if '1.5.' in haproxy_version_result.stdout else '1.4' }}"
 
 - name: Copy HAProxy configuration in place.
+  become: yes
   template:
     src: haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
@@ -44,4 +49,5 @@
   notify: restart haproxy
 
 - name: Ensure HAProxy is started and enabled on boot.
+  become: yes
   service: name=haproxy state=started enabled=yes
