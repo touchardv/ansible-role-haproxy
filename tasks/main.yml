@@ -15,6 +15,16 @@
   yum: name=haproxy state=installed
   when: ansible_os_family == 'RedHat'
 
+- name: Configure SELinux to allow all connections
+  become: yes
+  seboolean:
+    name: haproxy_connect_any
+    state: yes
+  # selinux_enabled fact is set by
+  # https://github.com/openmicroscopy/infrastructure/tree/master/ansible/roles/selinux-utils
+  # Since this is an external role we can't assume it's been run
+  when: "{{ selinux_enabled | default(False) }}"
+
 - name: Get HAProxy version.
   command: haproxy -v
   register: haproxy_version_result

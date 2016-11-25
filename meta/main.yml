@@ -1,5 +1,6 @@
 ---
 dependencies: []
+# Requires https://github.com/openmicroscopy/infrastructure/tree/master/ansible/roles/selinux-utils
 
 galaxy_info:
   author: geerlingguy
