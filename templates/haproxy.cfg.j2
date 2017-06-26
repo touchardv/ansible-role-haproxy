@@ -43,6 +43,12 @@ frontend {{ front.name }}
     bind {{ front.address }}
     mode {{ front.mode }}
     default_backend {{ front.backend }}
+{%   for frontopt in front.options | default([]) %}
+    option {{ frontopt }}
+{%   endfor %}
+{%   if front.timeout_client | default('') | length > 0 %}
+    timeout client {{ front.timeout_client }}
+{%   endif %}
 {% endfor %}
 
 {% for back in haproxy_backends %}
@@ -53,15 +59,19 @@ backend {{ back.name }}
 {%   if back.balance_method | default('') | length > 0 %}
     balance {{ back.balance_method }}
 {%   endif %}
-{%   if back.options | default([]) %}
-{%     for backopt in back.options %}
+{%   for backopt in back.options | default([]) %}
     option {{ backopt }}
-{%     endfor %}
-{%   endif %}
+{%   endfor %}
 {%   if back.cookie | default('') | length > 0 %}
     cookie {{ back.cookie }}
 {%   endif %}
 {%   for backend in back.servers %}
     server {{ backend.name }} {{ backend.address }} cookie {{ backend.name }} check
 {%   endfor %}
+{%   if back.timeout_connect | default('') | length > 0 %}
+    timeout connect {{ back.timeout_connect }}
+{%   endif %}
+{%   if back.timeout_server | default('') | length > 0 %}
+    timeout server {{ back.timeout_server }}
+{%   endif %}
 {% endfor %}

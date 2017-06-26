@@ -27,27 +27,32 @@ The jail directory where chroot() will be performed before dropping privileges. 
 
 The user and group under which HAProxy should run. Only change this if you know what you're doing!
 
-    haproxy_frontend_name: 'hafrontend'
-    haproxy_frontend_bind_address: '*'
-    haproxy_frontend_port: 80
-    haproxy_frontend_mode: 'http'
+    haproxy_frontends:
+    - name: 'hafrontend'
+      address: '*:80'
+      mode: 'http'
+      backend: 'habackend'
+      # Optional:
+      timeout client: 10s
 
-HAProxy frontend configuration directives.
+List of HAProxy frontends.
 
-    haproxy_backend_name: 'habackend'
-    haproxy_backend_mode: 'http'
-    haproxy_backend_balance_method: 'roundrobin'
-    haproxy_backend_httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'
-
-HAProxy backend configuration directives.
-
-    haproxy_backend_servers:
+    haproxy_backends:
+    - name: 'habackend'
+      # All fields are optional apart from servers
+      mode: 'http'
+      balance_method: 'roundrobin'
+      options:
+      - "haproxy_backend_httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'"
+      servers:
       - name: app1
         address: 192.168.0.1:80
       - name: app2
         address: 192.168.0.2:80
+      timeout connect 5s
+      timeout server 20s
 
-A list of backend servers (name and address) to which HAProxy will distribute requests.
+List of HAProxy backends and servers to which HAProxy will distribute requests.
 
     haproxy_global_vars:
       - 'ssl-default-bind-ciphers ABCD+KLMJ:...'
