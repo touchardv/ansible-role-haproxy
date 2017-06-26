@@ -4,6 +4,22 @@
   apt: name=haproxy state=installed
   when: ansible_os_family == 'Debian'
 
+- name: configure haproxy logrotation
+  become: yes
+  template:
+    backup: no
+    dest: /etc/logrotate.d/haproxy
+    src: logrotated-haproxy.j2
+
+- name: configure haproxy log file
+  become: yes
+  template:
+    backup: no
+    dest: /etc/rsyslog.d/90-haproxy.conf
+    src: rsyslogd-haproxy.j2
+  notify:
+  - restart rsyslog
+
 - name: Ensure HAProxy is enabled (so init script will start it on Debian).
   become: yes
   lineinfile:

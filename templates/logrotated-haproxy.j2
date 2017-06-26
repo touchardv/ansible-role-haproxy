@@ -1,0 +1,15 @@
+# {{ ansible_managed }}
+/var/log/haproxy/*.log {
+    {{ haproxy_logrotate_interval }}
+    missingok
+    rotate {{ haproxy_logrotate_backlog_size }}
+    compress
+    delaycompress
+    notifempty
+    create 640 root adm
+    sharedscripts
+    postrotate
+        /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+        /bin/kill -HUP `cat /var/run/rsyslogd.pid 2> /dev/null` 2> /dev/null || true
+    endscript
+}
