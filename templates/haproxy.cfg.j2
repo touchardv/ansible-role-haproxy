@@ -46,7 +46,7 @@ frontend {{ front.name }}
     bind {{ front.address }}
     mode {{ front.mode }}
     default_backend {{ front.backend }}
-{%   for frontopt in front.options | default([]) %}
+{%   for frontopt in (front.options | default([])) %}
     option {{ frontopt }}
 {%   endfor %}
 {%   if front.timeout_client | default('') | length > 0 %}
@@ -62,7 +62,7 @@ backend {{ back.name }}
 {%   if back.balance_method | default('') | length > 0 %}
     balance {{ back.balance_method }}
 {%   endif %}
-{%   for backopt in back.options | default([]) %}
+{%   for backopt in (back.options | default([])) %}
     option {{ backopt }}
 {%   endfor %}
 {%   if back.cookie | default('') | length > 0 %}
