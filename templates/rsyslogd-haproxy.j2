@@ -1,4 +1,4 @@
-{% if haproxy_syslog_dest | default('') | length > 0 %}
+{% if haproxy_syslog_dest | length > 0 %}
 {%   if haproxy_syslog_configure_udp %}
 # Provides UDP syslog reception
 $ModLoad imudp

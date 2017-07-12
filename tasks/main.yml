@@ -11,12 +11,16 @@
     dest: /etc/logrotate.d/haproxy
     src: logrotated-haproxy.j2
 
+# TODO: This is still in development- more configuration is needed to prevent
+# some haproxy logs going to the console, and to potentially take account of
+# other apps using the same syslog facility (probably unlikely)
 - name: configure haproxy log file
   become: yes
   template:
     backup: no
     dest: /etc/rsyslog.d/90-haproxy.conf
     src: rsyslogd-haproxy.j2
+  when: 'haproxy_syslog_dest | length > 0'
   notify:
   - restart rsyslog
 
