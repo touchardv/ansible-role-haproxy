@@ -2,3 +2,9 @@
 - name: restart haproxy
   become: yes
   service: name=haproxy state=restarted
+
+- name: restart rsyslog
+  become: yes
+  service:
+    name: rsyslog
+    state: restarted

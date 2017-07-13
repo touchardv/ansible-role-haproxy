@@ -9,3 +9,18 @@ haproxy_backends: []
 
 # Extra global vars (see README for example usage).
 haproxy_global_vars: []
+
+# If you want to log to a file you need to configure rsyslog, but this may
+# have global effects on syslog
+# This variable is for convenience, set to True if this is the only role
+# that will be configuring rsyslog
+haproxy_syslog_configure_udp: False
+
+# The sylog destination, e.g. 'local2', default disabled
+haproxy_syslog_dest: ''
+
+# Rotate log files at this interval
+haproxy_logrotate_interval: daily
+
+# Number of backlog files to keep
+haproxy_logrotate_backlog_size: 366

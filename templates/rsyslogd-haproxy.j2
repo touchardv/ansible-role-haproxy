@@ -1,0 +1,10 @@
+{% if haproxy_syslog_dest | length > 0 %}
+{%   if haproxy_syslog_configure_udp %}
+# Provides UDP syslog reception
+$ModLoad imudp
+$UDPServerRun 514
+$AllowedSender UDP, 127.0.0.1
+{%   endif %}
+
+{{ haproxy_syslog_dest }}.* /var/log/haproxy/haproxy.log
+{% endif %}
