@@ -43,6 +43,7 @@
   seboolean:
     name: haproxy_connect_any
     state: yes
+    persistent: yes
   # selinux_enabled fact is set by
   # https://github.com/openmicroscopy/infrastructure/tree/master/ansible/roles/selinux-utils
   # Since this is an external role we can't assume it's been run
