@@ -63,7 +63,7 @@
 - name: Copy HAProxy configuration in place.
   become: yes
   template:
-    src: haproxy.cfg.j2
+    src: "{{ haproxy_cfg_template }}"
     dest: /etc/haproxy/haproxy.cfg
     mode: 0644
     validate: haproxy -f %s -c -q
