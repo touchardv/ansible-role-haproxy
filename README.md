@@ -61,6 +61,8 @@ List of HAProxy backends and servers to which HAProxy will distribute requests.
 
 A list of extra global variables to add to the global configuration section inside `haproxy.cfg`.
 
+Advanced users can override the template used for `haproxy.cfg` by setting `haproxy_cfg_template`. In this case most of the above role variables will be ignored unless the default template is copied.
+
 ## Dependencies
 
 None.
