@@ -18,9 +18,10 @@
   become: yes
   template:
     backup: no
-    dest: /etc/rsyslog.d/90-haproxy.conf
+    # Deliberately named to overwrite the ubuntu haproxy config:
+    dest: /etc/rsyslog.d/49-haproxy.conf
     src: rsyslogd-haproxy.j2
-  when: 'haproxy_syslog_dest | length > 0'
+  when: haproxy_syslog_enable
   notify:
   - restart rsyslog
 
