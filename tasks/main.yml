@@ -47,7 +47,7 @@
   # selinux_enabled fact is set by
   # https://github.com/openmicroscopy/infrastructure/tree/master/ansible/roles/selinux-utils
   # Since this is an external role we can't assume it's been run
-  when: "{{ selinux_enabled | default(False) }}"
+  when: "selinux_enabled | default(False)"
 
 - name: Get HAProxy version.
   become: yes
