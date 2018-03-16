@@ -22,9 +22,12 @@
       haproxy_syslog_enable: True
       haproxy_syslog_configure_udp: True
       haproxy_frontends:
-        - name: hafrontend
+        - name: hafrontend-http
           address: '*:80'
-          mode: http
+          backend: habackend
+        - name: hafrontend-tcp
+          address: '*:81'
+          mode: tcp
           backend: habackend
       haproxy_backends:
         - name: habackend

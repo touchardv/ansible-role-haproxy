@@ -44,7 +44,7 @@ defaults
 {% for front in haproxy_frontends %}
 frontend {{ front.name }}
     bind {{ front.address }}
-    mode {{ front.mode }}
+    mode {{ front.mode | default('http') }}
     default_backend {{ front.backend }}
 {%   for frontopt in (front.options | default([])) %}
     option {{ frontopt }}
@@ -52,16 +52,18 @@ frontend {{ front.name }}
 {%   if front.timeout_client | default('') | length > 0 %}
     timeout client {{ front.timeout_client }}
 {%   endif %}
-{% endfor %}
-{% if haproxy_syslog_enable %}
+{%   if haproxy_syslog_enable %}
+{%     if (front.mode | default('http')) == 'http' %}
     log 127.0.0.1 {{ haproxy_syslog_dest_http }}
-{% endif %}
+{%     else %}
+    log 127.0.0.1 {{ haproxy_syslog_dest_tcp }}
+{%     endif %}
+{%   endif %}
+{% endfor %}
 
 {% for back in haproxy_backends %}
 backend {{ back.name }}
-{%   if back.mode | default('') | length > 0 %}
-    mode {{ back.mode }}
-{%   endif %}
+    mode {{ back.mode | default('http') }}
 {%   if back.balance_method | default('') | length > 0 %}
     balance {{ back.balance_method }}
 {%   endif %}
