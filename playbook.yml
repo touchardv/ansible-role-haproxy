@@ -1,0 +1,32 @@
+---
+- hosts: all
+
+  pre_tasks:
+
+    - name: Install dependencies
+      package:
+        name:
+        - curl
+        - rsyslog
+        state: installed
+
+  roles:
+    - role: ansible-role-haproxy
+      haproxy_syslog_enable: True
+      haproxy_syslog_configure_udp: True
+      haproxy_frontends:
+        - name: hafrontend-http
+          address: '*:80'
+          backend: habackend
+        - name: hafrontend-tcp
+          address: '*:81'
+          mode: tcp
+          backend: habackend
+      haproxy_backends:
+        - name: habackend
+          mode: http
+          servers:
+            - name: app1
+              address: 192.168.0.1:80
+            - name: app2
+              address: 192.168.0.2:80

@@ -5,11 +5,12 @@
 
 Installs HAProxy on RedHat/CentOS and Debian/Ubuntu Linux servers.
 
-**Note**: This role _officially_ supports HAProxy versions 1.4 or 1.5. Future versions may require some rework.
+**Note**: This role _officially_ supports HAProxy versions 1.5 and 1.6. Future versions may require some rework.
 
 ## Requirements
 
-None.
+If SELinux is enabled on CentOS 7 and you are using non-standard ports you must include `role: openmicroscopy.selinux-utils` before this role in your playbook.
+
 
 ## Role Variables
 

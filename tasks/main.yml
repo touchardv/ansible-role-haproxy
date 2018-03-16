@@ -1,8 +1,9 @@
 ---
-- name: Ensure HAProxy is installed (Debian).
+- name: Ensure HAProxy is installed
   become: yes
-  apt: name=haproxy state=installed
-  when: ansible_os_family == 'Debian'
+  package:
+    name: haproxy
+    state: installed
 
 - name: configure haproxy logrotation
   become: yes
@@ -18,9 +19,10 @@
   become: yes
   template:
     backup: no
-    dest: /etc/rsyslog.d/90-haproxy.conf
+    # Deliberately named to overwrite the ubuntu haproxy config:
+    dest: /etc/rsyslog.d/49-haproxy.conf
     src: rsyslogd-haproxy.j2
-  when: 'haproxy_syslog_dest | length > 0'
+  when: haproxy_syslog_enable
   notify:
   - restart rsyslog
 
@@ -33,11 +35,6 @@
     state: present
   when: ansible_os_family == 'Debian'
 
-- name: Ensure HAProxy is installed (RedHat).
-  become: yes
-  yum: name=haproxy state=installed
-  when: ansible_os_family == 'RedHat'
-
 - name: Configure SELinux to allow all connections
   become: yes
   seboolean:
@@ -47,18 +44,7 @@
   # selinux_enabled fact is set by
   # https://github.com/openmicroscopy/infrastructure/tree/master/ansible/roles/selinux-utils
   # Since this is an external role we can't assume it's been run
-  when: "{{ selinux_enabled | default(False) }}"
-
-- name: Get HAProxy version.
-  become: yes
-  command: haproxy -v
-  register: haproxy_version_result
-  changed_when: false
-  check_mode: no
-
-- name: Set HAProxy version.
-  set_fact:
-    haproxy_version: "{{ '1.5' if '1.5.' in haproxy_version_result.stdout else '1.4' }}"
+  when: "selinux_enabled | default(False)"
 
 - name: Copy HAProxy configuration in place.
   become: yes

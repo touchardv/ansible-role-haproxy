@@ -1,0 +1,29 @@
+---
+driver:
+  name: docker
+
+vagrant:
+  platforms:
+    - name: centos7
+      box: centos/7
+  providers:
+    - name: virtualbox
+      type: virtualbox
+      options:
+        memory: 512
+        cpus: 1
+  instances:
+    - name: haproxy
+
+docker:
+  containers:
+  - name: haproxy-c7
+    image: centos/systemd
+    image_version: latest
+    privileged: True
+  - name: haproxy-u1604
+    image: ubuntu
+    image_version: '16.04'
+
+verifier:
+  name: testinfra

@@ -1,8 +1,8 @@
 global
   log /dev/log  local0
   log /dev/log  local1 notice
-{% if haproxy_syslog_dest | default('') | length > 0 %}
-  log 127.0.0.1 {{ haproxy_syslog_dest }}
+{% if haproxy_syslog_enable %}
+  log 127.0.0.1 {{ haproxy_syslog_dest }} notice
 {% endif %}
 {% if haproxy_socket != '' %}
   stats socket {{ haproxy_socket }} level admin
@@ -22,15 +22,9 @@ defaults
   mode  http
   option  httplog
   option  dontlognull
-{% if haproxy_version == '1.4' %}
-        contimeout 5000
-        clitimeout 50000
-        srvtimeout 50000
-{% else %}
-        timeout connect 5000
-        timeout client 50000
-        timeout server 50000
-{% endif %}
+  timeout connect 5000
+  timeout client 50000
+  timeout server 50000
 {% if ansible_os_family == 'Debian' %}
   errorfile 400 /etc/haproxy/errors/400.http
   errorfile 403 /etc/haproxy/errors/403.http
@@ -44,7 +38,7 @@ defaults
 {% for front in haproxy_frontends %}
 frontend {{ front.name }}
     bind {{ front.address }}
-    mode {{ front.mode }}
+    mode {{ front.mode | default('http') }}
     default_backend {{ front.backend }}
 {%   for frontopt in (front.options | default([])) %}
     option {{ frontopt }}
@@ -52,13 +46,18 @@ frontend {{ front.name }}
 {%   if front.timeout_client | default('') | length > 0 %}
     timeout client {{ front.timeout_client }}
 {%   endif %}
+{%   if haproxy_syslog_enable %}
+{%     if (front.mode | default('http')) == 'http' %}
+    log 127.0.0.1 {{ haproxy_syslog_dest_http }}
+{%     else %}
+    log 127.0.0.1 {{ haproxy_syslog_dest_tcp }}
+{%     endif %}
+{%   endif %}
 {% endfor %}
 
 {% for back in haproxy_backends %}
 backend {{ back.name }}
-{%   if back.mode | default('') | length > 0 %}
-    mode {{ back.mode }}
-{%   endif %}
+    mode {{ back.mode | default('http') }}
 {%   if back.balance_method | default('') | length > 0 %}
     balance {{ back.balance_method }}
 {%   endif %}
