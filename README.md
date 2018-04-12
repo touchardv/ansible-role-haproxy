@@ -45,10 +45,13 @@ List of HAProxy frontends.
       mode: 'http'
       balance_method: 'roundrobin'
       options:
-      - "haproxy_backend_httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'"
+        - "haproxy_backend_httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'"
+      params:
+        - 'stick on src'
       servers:
       - name: app1
         address: 192.168.0.1:80
+	extra_opts: 'inter 2s'
       - name: app2
         address: 192.168.0.2:80
       timeout connect 5s
