@@ -17,6 +17,10 @@
       haproxy_frontends:
         - name: hafrontend-http
           address: '*:80'
+          extra_addresses:
+            - '*:8080'
+          #params:
+          #  - 'some extra frontend param, acl for example'
           backend: habackend
         - name: hafrontend-tcp
           address: '*:81'
@@ -25,8 +29,11 @@
       haproxy_backends:
         - name: habackend
           mode: http
+          params:
+            - 'stick on src'
           servers:
             - name: app1
               address: 192.168.0.1:80
+              extra_opts: 'inter 2s'
             - name: app2
               address: 192.168.0.2:80

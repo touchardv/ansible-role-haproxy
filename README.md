@@ -32,7 +32,11 @@ The user and group under which HAProxy should run. Only change this if you know 
     haproxy_frontends:
     - name: 'hafrontend'
       address: '*:80'
+      extra_addresses:
+        - '*:8080'
       mode: 'http'
+      #params:
+      #  - 'some extra frontend param, acl for example'
       backend: 'habackend'
       # Optional:
       timeout client: 10s
@@ -51,7 +55,7 @@ List of HAProxy frontends.
       servers:
       - name: app1
         address: 192.168.0.1:80
-	extra_opts: 'inter 2s'
+	    extra_opts: 'inter 2s'
       - name: app2
         address: 192.168.0.2:80
       timeout connect 5s
