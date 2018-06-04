@@ -8,7 +8,13 @@
         name:
         - curl
         - rsyslog
+        - openssl
         state: installed
+    - name: Ensure dummy certificate is in place
+      command: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/certs/dummy.pem -out /etc/ssl/certs/dummy.pem -subj "/CN=localhost"
+      args:
+          creates: /etc/ssl/certs/dummy.pem
+      become: True
 
   roles:
     - role: ansible-role-haproxy
@@ -25,6 +31,11 @@
         - name: hafrontend-tcp
           address: '*:81'
           mode: tcp
+          backend: habackend
+        - name: hafrontend-https
+          address: '*:443'
+          bind_params: 'ssl crt /etc/ssl/certs/dummy.pem'
+          mode: http
           backend: habackend
       haproxy_backends:
         - name: habackend

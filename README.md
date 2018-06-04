@@ -34,6 +34,8 @@ The user and group under which HAProxy should run. Only change this if you know 
       address: '*:80'
       extra_addresses:
         - '*:8080'
+      #bind_params: 'param1 param2'
+      #extra bind parameters, 'ssl' for example
       mode: 'http'
       #params:
       #  - 'some extra frontend param, acl for example'
