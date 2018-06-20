@@ -2,7 +2,7 @@
 - name: Ensure HAProxy is installed
   become: yes
   package:
-    name: haproxy
+    name: "{{ haproxy_package_name }}"
     state: installed
 
 - name: configure haproxy logrotation
