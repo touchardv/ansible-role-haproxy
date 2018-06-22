@@ -3,7 +3,7 @@
   become: yes
   package:
     name: "{{ haproxy_package_name }}"
-    state: installed
+    state: present
 
 - name: configure haproxy logrotation
   become: yes

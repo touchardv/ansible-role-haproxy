@@ -38,7 +38,13 @@ defaults
 {% for front in haproxy_frontends %}
 frontend {{ front.name }}
     bind {{ front.address }}
+    {% for addr in (front.extra_addresses | default([])) %}
+    bind {{ addr }}
+    {% endfor %}
     mode {{ front.mode | default('http') }}
+    {%   for frontparam in (front.params | default([])) %}
+    {{ frontparam }}
+    {%   endfor %}
     default_backend {{ front.backend }}
 {%   for frontopt in (front.options | default([])) %}
     option {{ frontopt }}
@@ -64,11 +70,14 @@ backend {{ back.name }}
 {%   for backopt in (back.options | default([])) %}
     option {{ backopt }}
 {%   endfor %}
+{%   for backparam in (back.params | default([])) %}
+    {{ backparam }}
+{%   endfor %}
 {%   if back.cookie | default('') | length > 0 %}
     cookie {{ back.cookie }}
 {%   endif %}
 {%   for backend in back.servers %}
-    server {{ backend.name }} {{ backend.address }} {% if back.cookie | default('') | length > 0 %}cookie {{ backend.name }}{% endif %} {% if back.check | default(True) %}check{% endif %}
+    server {{ backend.name }} {{ backend.address }} {% if back.cookie | default('') | length > 0 %}cookie {{ backend.name }}{% endif %} {% if back.check | default(True) %}check{% endif %} {% if backend.extra_opts | default('') %} {{ backend.extra_opts }} {% endif %}
 
 {%   endfor %}
 {%   if back.timeout_connect | default('') | length > 0 %}
