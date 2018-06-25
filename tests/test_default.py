@@ -36,6 +36,16 @@ def test_http(Command, File, Sudo):
             '0/0/0/0/0 0/0 "GET / HTTP/1.1"')
 
 
+def test_https(Command, File, Sudo):
+    out = Command.check_output("curl -ks https://localhost:443/")
+    assert '503 Service Unavailable' in out
+    assert 'No server is available to handle this request.' in out
+    with Sudo():
+        log = File('/var/log/haproxy/haproxy-http.log')
+        assert log.content_string.splitlines()[-1].endswith(
+            '0/0/0/0/0 0/0 "GET / HTTP/1.1"')
+
+
 def test_tcp(Command, File, Sudo):
     out = Command.check_output("curl -s http://localhost:81/")
     assert '503 Service Unavailable' in out
