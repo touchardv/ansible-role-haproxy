@@ -21,13 +21,13 @@ haproxy_defaults_timeouts:
   - server  50000
 
 # Set this to True to configure syslog file logging
-haproxy_syslog_enable: False
+haproxy_syslog_enable: false
 
 # If you want to log to a file you need to configure rsyslog, but this may
 # have global effects on syslog
 # This variable is for convenience, set to True if this is the only role
 # that will be configuring rsyslog
-haproxy_syslog_configure_udp: False
+haproxy_syslog_configure_udp: false
 
 # The syslog destinations
 haproxy_syslog_dest: local2

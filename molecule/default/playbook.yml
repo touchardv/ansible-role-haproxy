@@ -5,27 +5,30 @@
     - name: Install dependencies
       package:
         name:
-        - curl
-        - rsyslog
-        - openssl
+          - curl
+          - rsyslog
+          - openssl
         state: installed
     - name: Ensure dummy certificate is in place
-      command: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/certs/dummy.pem -out /etc/ssl/certs/dummy.pem -subj "/CN=localhost"
+      command: >-
+        openssl req -x509 -nodes -days 365 -newkey rsa:2048
+        -keyout /etc/ssl/certs/dummy.pem -out /etc/ssl/certs/dummy.pem
+        -subj "/CN=localhost"
       args:
-          creates: /etc/ssl/certs/dummy.pem
-      become: True
+        creates: /etc/ssl/certs/dummy.pem
+      become: true
 
   roles:
     - role: ansible-role-haproxy
-      haproxy_syslog_enable: True
-      haproxy_syslog_configure_udp: True
+      haproxy_syslog_enable: true
+      haproxy_syslog_configure_udp: true
       haproxy_frontends:
         - name: hafrontend-http
           address: '*:80'
           extra_addresses:
             - '*:8080'
-          #params:
-          #  - 'some extra frontend param, acl for example'
+          # params:
+          #   - 'some extra frontend param, acl for example'
           backend: habackend
         - name: hafrontend-tcp
           address: '*:81'
