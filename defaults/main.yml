@@ -11,6 +11,15 @@ haproxy_backends: []
 # Extra global vars (see README for example usage).
 haproxy_global_vars: []
 
+haproxy_defaults_options:
+  - httplog
+  - dontlognull
+
+haproxy_defaults_timeouts:
+  - connect 5000
+  - client  50000
+  - server  50000
+
 # Set this to True to configure syslog file logging
 haproxy_syslog_enable: False
 
