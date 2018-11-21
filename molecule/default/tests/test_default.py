@@ -35,7 +35,7 @@ def test_http(host):
     with host.sudo():
         log = host.file('/var/log/haproxy/haproxy-http.log')
         assert log.content_string.splitlines()[-1].endswith(
-            '0/0/0/0/0 0/0 "GET / HTTP/1.1"')
+            '/0/0/0 0/0 "GET / HTTP/1.1"')
 
 
 def test_https(host):
@@ -45,7 +45,7 @@ def test_https(host):
     with host.sudo():
         log = host.file('/var/log/haproxy/haproxy-http.log')
         assert log.content_string.splitlines()[-1].endswith(
-            '0/0/0/0/0 0/0 "GET / HTTP/1.1"')
+            '/0/0/0 0/0 "GET / HTTP/1.1"')
 
 
 def test_tcp(host):
@@ -55,4 +55,4 @@ def test_tcp(host):
     with host.sudo():
         log = host.file('/var/log/haproxy/haproxy-tcp.log')
         assert log.content_string.splitlines()[-1].endswith(
-            '0/0/0/0/0 0/0')
+            '/0/0/0 0/0')
