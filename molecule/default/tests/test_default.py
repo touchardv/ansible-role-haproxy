@@ -39,7 +39,7 @@ def test_http(host, command):
     with host.sudo():
         log = host.file('/var/log/haproxy/haproxy-http.log')
         lastline = log.content_string.splitlines()[-1]
-        assert re.match(r'.*[0/1]/[0/1]/0/0/0 0/0 "GET / HTTP/1.1"', lastline)
+        assert re.match(r'.*[01]/[01]/0/0/0 0/0 "GET / HTTP/1.1"', lastline)
 
 
 def test_tcp(host):
