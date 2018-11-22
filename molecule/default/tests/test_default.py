@@ -1,5 +1,6 @@
 import os
 import pytest
+import re
 
 import testinfra.utils.ansible_runner
 
@@ -28,24 +29,17 @@ def test_logfiles(host, name):
         assert host.file('/var/log/haproxy/%s' % name).exists
 
 
-def test_http(host):
-    out = host.check_output("curl -s http://localhost/")
+@pytest.mark.parametrize('command', [
+    "curl -s http://localhost/",
+    "curl -ks https://localhost:443/"])
+def test_http(host, command):
+    out = host.check_output(command)
     assert '503 Service Unavailable' in out
     assert 'No server is available to handle this request.' in out
     with host.sudo():
         log = host.file('/var/log/haproxy/haproxy-http.log')
-        assert log.content_string.splitlines()[-1].endswith(
-            '/0/0/0 0/0 "GET / HTTP/1.1"')
-
-
-def test_https(host):
-    out = host.check_output("curl -ks https://localhost:443/")
-    assert '503 Service Unavailable' in out
-    assert 'No server is available to handle this request.' in out
-    with host.sudo():
-        log = host.file('/var/log/haproxy/haproxy-http.log')
-        assert log.content_string.splitlines()[-1].endswith(
-            '/0/0/0 0/0 "GET / HTTP/1.1"')
+        lastline = log.content_string.splitlines()[-1]
+        assert re.match(r'.*[0/1]/[0/1]/0/0/0 0/0 "GET / HTTP/1.1"', lastline)
 
 
 def test_tcp(host):
