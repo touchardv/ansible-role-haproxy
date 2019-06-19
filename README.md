@@ -1,7 +1,7 @@
 # Ansible Role: HAProxy
 
-[![Build Status](https://travis-ci.org/openmicroscopy/ansible-role-haproxy.svg?branch=master)](https://travis-ci.org/openmicroscopy/ansible-role-haproxy)
-[![Ansible Role](https://img.shields.io/ansible/role/14760.svg)](https://galaxy.ansible.com/openmicroscopy/haproxy/)
+[![Build Status](https://travis-ci.org/ome/ansible-role-haproxy.svg?branch=master)](https://travis-ci.org/ome/ansible-role-haproxy)
+[![Ansible Role](https://img.shields.io/ansible/role/14760.svg)](https://galaxy.ansible.com/ome/haproxy/)
 
 Installs HAProxy on RedHat/CentOS and Debian/Ubuntu Linux servers.
 
@@ -9,7 +9,7 @@ Installs HAProxy on RedHat/CentOS and Debian/Ubuntu Linux servers.
 
 ## Requirements
 
-If SELinux is enabled on CentOS 7 and you are using non-standard ports you must include `role: openmicroscopy.selinux-utils` before this role in your playbook.
+If SELinux is enabled on CentOS 7 and you are using non-standard ports you must include `role: ome.selinux_utils` before this role in your playbook.
 
 
 ## Role Variables
@@ -82,7 +82,7 @@ None.
     - hosts: balancer
       sudo: yes
       roles:
-        - { role: openmicroscopy.haproxy }
+        - { role: ome.haproxy }
 
 ## License
 

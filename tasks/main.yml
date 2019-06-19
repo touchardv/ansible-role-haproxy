@@ -41,8 +41,7 @@
     name: haproxy_connect_any
     state: true
     persistent: true
-  # selinux_enabled fact is set by
-  # https://github.com/openmicroscopy/infrastructure/tree/master/ansible/roles/selinux-utils
+  # selinux_enabled fact is set by ome.selinux_utils
   # Since this is an external role we can't assume it's been run
   when: "selinux_enabled | default(False)"
 

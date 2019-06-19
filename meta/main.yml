@@ -1,7 +1,6 @@
 ---
 dependencies: []
-# CentOS-7 may require
-# https://github.com/openmicroscopy/infrastructure/tree/master/ansible/roles/selinux-utils
+# CentOS-7 may require ome.selinux_utils
 
 galaxy_info:
   author: "ome-devel@lists.openmicroscopy.org.uk (upstream: geerlingguy)"
