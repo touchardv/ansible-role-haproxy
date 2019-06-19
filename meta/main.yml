@@ -3,6 +3,7 @@ dependencies: []
 # CentOS-7 may require ome.selinux_utils
 
 galaxy_info:
+  role_name: haproxy
   author: "ome-devel@lists.openmicroscopy.org.uk (upstream: geerlingguy)"
   description: HAProxy installation and configuration.
   company: Open Microscopy Environment
