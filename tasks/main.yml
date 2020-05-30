@@ -26,16 +26,6 @@
   notify:
     - restart rsyslog
 
-- name: Fix logging of http/tcp requests in /var/log/messages
-  become: true
-  lineinfile:
-    dest: /etc/rsyslog.conf
-    regexp: ".*/var/log/messages$"
-    line: "*.info;mail.none;authpriv.none;cron.none;{{ haproxy_syslog_dest_tcp }}.none;{{ haproxy_syslog_dest_http}}.none                /var/log/messages"
-  when : haproxy_syslog_enable
-  notify:
-    - restart rsyslog
-
 - name: Ensure HAProxy is enabled (so init script will start it on Debian).
   become: true
   lineinfile:

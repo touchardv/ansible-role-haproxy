@@ -7,6 +7,9 @@ $AllowedSender UDP, 127.0.0.1
 {%   endif %}
 
 {{ haproxy_syslog_dest }}.* /var/log/haproxy/haproxy.log
+& stop
 {{ haproxy_syslog_dest_tcp }}.* /var/log/haproxy/haproxy-tcp.log
+& stop
 {{ haproxy_syslog_dest_http }}.* /var/log/haproxy/haproxy-http.log
+& stop
 {% endif %}

@@ -1,8 +1,8 @@
 global
-  log /dev/log  local0
-  log /dev/log  local1 notice
 {% if haproxy_syslog_enable %}
   log 127.0.0.1 {{ haproxy_syslog_dest }} notice
+{% else %}
+  log /dev/log  {{ haproxy_syslog_dest }} notice
 {% endif %}
 {% if haproxy_socket != '' %}
   stats socket {{ haproxy_socket }} level admin
